@@ -19,7 +19,18 @@ server:
 install:
 	mv build/ck-* /usr/local/bin
 
+wrapper-client:
+	mkdir -p build
+	cd cmd/ck-client-wrapper && CGO_ENABLED=1 go build -buildmode=c-shared -o ../../build/libcloak_client.so .
+
+wrapper-server:
+	mkdir -p build
+	cd cmd/ck-server-wrapper && CGO_ENABLED=1 go build -buildmode=c-shared -o ../../build/libcloak_server.so .
+
+wrappers: wrapper-client wrapper-server
+
 all: client server
 
 clean:
 	rm -rf ./build/ck-*
+	rm -rf ./build/libcloak_*.so ./build/libcloak_*.h
